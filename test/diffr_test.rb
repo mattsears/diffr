@@ -4,14 +4,20 @@ describe Diffr do
 
   describe "how do two strings diffr?" do
 
-    it "should return an array diffs for single line strings" do
+    it "should return the added and deleted diffs for single-line strings" do
       Diffr.diffs("this is an old string", "this is a new string").must_equal [
         {:source=>:old, :line=>1, :change=>:delete, :string=>"this is an old string"},
         {:source=>:new, :line=>1, :change=>:add, :string=>"this is a new string"}
       ]
     end
 
-    describe "with multiline strings" do
+    it "should return an the same diff for identical strings" do
+      Diffr.diffs("this is the same string.", "this is the same string.").must_equal [
+        {:source=>:old, :line=>1, :change=>:same, :string=>"this is the same string."}
+      ]
+    end
+
+    describe "with multi-line strings" do
       before do
         @old_text = <<-END.gsub(/^ {6}/, '')
           This line of document stays the same.
